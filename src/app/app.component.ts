@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription'
 
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
@@ -20,6 +21,8 @@ export class AppComponent implements OnInit {
   user : Observable<firebase.User>;
   recaptchaVerifier : any;
 
+  subscription: Subscription;  
+
   constructor(private firebaseAuth: AngularFireAuth, public authService: FirebasePhoneAuthService){
 
     this.user = firebaseAuth.authState;
@@ -29,7 +32,7 @@ export class AppComponent implements OnInit {
 
     });
 
-    this.authService.subscribe((e) => {
+    this.subscription = this.authService.subscribe((e) => {
       console.log(e);
     });
 
@@ -45,5 +48,9 @@ export class AppComponent implements OnInit {
   sendLoginCode = (phoneNumber : string) => this.authService.sendLoginCode(phoneNumber, this.recaptchaVerifier);
   verifyLoginCode = (code : string) => this.authService.verifyLoginCode(code);
   removeRecaptcha = () => this.authService.removeRecaptcha();
+
+  unsubscribe(){
+    this.subscription.unsubscribe();
+  }
 
 }
