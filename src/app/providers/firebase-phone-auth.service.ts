@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ElementRef } from '@angular/core';
 
 import * as firebase from 'firebase/app';
 
@@ -11,8 +11,14 @@ export class FirebasePhoneAuthService {
 
   constructor(){}
 
-  createRecaptcha = (elementId : string) => new firebase.auth.RecaptchaVerifier(elementId);
-  
+  createRecaptcha = (elementRef : ElementRef) => {
+    let element = document.createElement('div');
+    element.id = 'recaptcha-container';
+    elementRef.nativeElement.appendChild(element);
+
+    return new firebase.auth.RecaptchaVerifier('recaptcha-container');
+  };
+    
   sendLoginCode(num : string, appVerifier : any ){
     firebase.auth().signInWithPhoneNumber(num, appVerifier).then(e => this.confirmationResult = e).catch( error => console.log(error));
   }

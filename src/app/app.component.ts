@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { AngularFireAuth } from 'angularfire2/auth';
@@ -13,6 +13,9 @@ import { FirebasePhoneAuthService } from './providers/firebase-phone-auth.servic
 })
 export class AppComponent implements OnInit {
   title = 'app';
+
+  @ViewChild('recaptchaElement')
+  public recaptchaElement : ElementRef;
 
   user : Observable<firebase.User>;
   recaptchaVerifier : any;
@@ -30,7 +33,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(){
       
-    this.recaptchaVerifier = this.authService.createRecaptcha('recaptcha-container');
+    this.recaptchaVerifier = this.authService.createRecaptcha(this.recaptchaElement);
     this.recaptchaVerifier.render();
 
   }
