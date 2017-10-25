@@ -1,34 +1,24 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 
-import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 
 @Injectable()
 export class FirebasePhoneAuthService {
 
-  user : Observable<firebase.User>;
+  phoneAuthUser : any;
+
+  private confirmationResult : any;
+
+  constructor(){}
+
+  createRecaptcha = (elementId : string) => new firebase.auth.RecaptchaVerifier(elementId);
   
-  constructor(private firebaseAuth: AngularFireAuth){
-
-    this.user = firebaseAuth.authState;
-    console.log(this.user);
-
-    this.user.subscribe(e => {
-      if(e) console.log('user phone number ', e.phoneNumber);
-    });
-
+  sendLoginCode(num : string, appVerifier : any ){
+    firebase.auth().signInWithPhoneNumber(num, appVerifier).then(e => this.confirmationResult = e).catch( error => console.log(error));
   }
 
-  createRecaptcha = () => new firebase.auth.RecaptchaVerifier('recaptcha-container');
-
-
-  sendLoginCode(){
-
-  }
-
-  verifyLoginCode(){
-    
+  verifyLoginCode(verificationCode : string){
+    this.confirmationResult.confirm(verificationCode).then(e => this.phoneAuthUser = e.user).catch( error => console.log(error));
   }
 
 }
