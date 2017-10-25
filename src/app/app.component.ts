@@ -40,5 +40,6 @@ export class AppComponent implements OnInit {
 
   sendLoginCode = (phoneNumber : string) => this.authService.sendLoginCode(phoneNumber, this.recaptchaVerifier);
   verifyLoginCode = (code : string) => this.authService.verifyLoginCode(code);
+  removeRecaptcha = () => this.authService.removeRecaptcha();
 
 }
