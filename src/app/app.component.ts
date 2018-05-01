@@ -41,7 +41,7 @@ export class AppComponent implements OnInit {
   ngOnInit(){
       
     this.recaptchaVerifier = this.authService.createRecaptcha(this.recaptchaElement);
-    this.recaptchaVerifier.render();
+    // this.recaptchaVerifier.render();
 
   }
 
